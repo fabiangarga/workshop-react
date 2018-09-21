@@ -38,17 +38,32 @@ class Board extends Component {
         let winner = false;
         let winDiagonalRight = [0,4,8];
         let winDiagonalLeft = [2,4,6];
-        if(indexes.length === 3) {
+        console.log(indexes);
+        if(indexes.length >= 3) {
             indexes.sort((a, b) => a - b);
             if( indexes.every( x => winDiagonalRight.includes(x))) {
                 winner = true;
             } else if ( indexes.every( x => winDiagonalLeft.includes(x))) {
                 winner = true;
-            } else if ( (indexes[0] + indexes[2]) / 2 === indexes[1] ) {
+            } else if ( this.checkValues(indexes) ) {
                 winner = true;
             }
         }
         return winner;
+    };
+    checkValues = indexes => {
+        let counterRow = 0;
+        let counterCol = 0;
+        for(let i = 0; i < indexes.length; i++) {
+            let diff = indexes[i+1] - indexes[i];
+            if( diff === 3 ) {
+                counterCol++;
+            }
+            if(diff === 1) {
+                counterRow++;
+            }
+        }
+        return (counterRow === 2) ? true : counterCol === 2;
     };
     resetState = () => {
         this.setState(
